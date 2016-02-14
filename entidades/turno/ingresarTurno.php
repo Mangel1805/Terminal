@@ -5,134 +5,230 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Bootstrap - Prebuilt Layout</title>
-
-<!-- Bootstrap -->
 <link href="../../static/css/bootstrap.css" rel="stylesheet">
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
 
 </head>
 <body>
 <?php
 if (isset($_POST['enviar'])) {
-$fecha = $_POST['fecha'];
-$hora = $_POST['hora'];
-$bus = $_POST['bus'];
-$destino = $_POST['destino'];
+$cliente=$_POST['cliente'];
+$terminal=$_POST['terminal'];
+$bus=$_POST['bus'];
+$asiento=$_POST['asiento'];
+$descripcion=$_POST['descripcion'];
+$hora=$_POST['hora'];
+$codigo = $_POST['codigo'];
+$valor=$_POST['valor'];
+
 
 require('../../conexion.php');
 
 $con = Conectar();
-$sql = 'INSERT INTO horario (hor_fecha,hor_hora,bus_id,des_id)VALUES (:fecha, :hora, :bus,:destino)';
+$sql = 'INSERT INTO turno (tur_numero_asiento,tur_asiento_descripcion,tur_valor,tur_codigo,hor_id,cli_id,bus_id,ter_id)VALUES (:asiento,:descripcion,:valor,:codigo,:hora,:cliente,:bus,:terminal)';
 
 $q = $con->prepare($sql);
 
-$q->execute(array(':fecha'=>$fecha,':hora'=>$hora, ':bus'=>$bus,':destino'=>$destino));
-header("location:http://localhost/terminal/entidades/horario/listarHorario.php");
+$q->execute(array(':cliente'=>$cliente,':terminal'=>$terminal, ':bus'=>$bus,':asiento'=>$asiento,':descripcion'=>$descripcion,':hora'=>$hora,':codigo'=>$codigo,':valor'=>$valor));
+  header("location:http://localhost/terminal/entidades/turno/listarTurno.php"); 
 }
 ?>
+<nav class="navbar navbar-default">
+ 
+  <!-- /.container-fluid --> 
+</nav>
 <div class="container-fluid">
-
-
   <div class="row">
     <div class="col-md-6 col-md-offset-3">
-      <h3 class="text-center">Nuevo Bus</h3>
+      <h1 class="text-center">Reservación de Turno</h1>
     </div>
-
   </div>
- <hr>
-
+  <hr>
 </div>
 <div class="container">
-  <div class="row text-center">
-    <div class="col-md-6 col-md-offset-3 col-lg-offset-0 col-lg-12">
-    
-    </div>
-   
+  <div class="row text-center"></div>
+  <div class="row"></div>
+  <div class="row col-lg-12">
+    <div class="col-md-6 text-center">
+      <h4><strong>Nuevo Turno</strong></h4>
+      <hr>
+      <form id="form1" name="form1" method="post" >
+          <label>Cliente</label><br>
+              <?php 
+                echo("<select name='cliente' id='cliente'  class='mbn'>
+                     <optgroup label='-----------'>");
+                    require('../../conexion.php'); //llama al archivo conexion
+                    $con=Conectar();
+                    $sql=$con->prepare('select * from cliente'); //Se prepara la sentencia SQL
+                    $sql->execute(); //ejecutarla sentencia
+                    $resultado=$sql->fetchALL(PDO::FETCH_ASSOC);
+                    foreach($resultado as $row)
+                    {
+                      $id=$row["cli_id"];
+                      $descripcion=$row["cli_cedula"];
+                      echo("
+                            <option value='".$id."'>".$descripcion."</option>
+                         ");
+                      
+                    }
+                    echo("</optgroup>
+                        </select><br> ");
+              ?>
 
-    <form id="form1" name="form1" method="post" >
-
-	  <label>Fecha</label>
-    <input type="date" name="fecha" id="fecha" value=""><br>
-    <label>hora</label>
-    <input type="time" name="hora" id="hora" value=""><br>
-    <label>bus</label>
-   
-
-    <select name="bus" id="bus"  class="mbn">
-       <optgroup label="-----------">
-          <?php 
-              require('../../conexion.php'); //llama al archivo conexion
-              $con=Conectar();
-              $sql=$con->prepare('select * from bus'); //Se prepara la sentencia SQL
-              $sql->execute(); //ejecutarla sentencia
-              $resultado=$sql->fetchALL(PDO::FETCH_ASSOC);
-              foreach($resultado as $row)
-              {
-                $id=$row["bus_id"];
-                $disco=$row["bus_num_disco"];
-                echo("
-                      <option value='".$id."'>".$disco."</option>
-                   ");
-              }
+          <label>Terminal</label><br>
+              <?php 
+                echo("<select name='terminal' id='terminal'  class='mbn'>
+                     <optgroup label='-----------'>");
+                  
+                    $sql=$con->prepare('select * from terminal'); //Se prepara la sentencia SQL
+                    $sql->execute(); //ejecutarla sentencia
+                    $resultado=$sql->fetchALL(PDO::FETCH_ASSOC);
+                    foreach($resultado as $row)
+                    {
+                      $id=$row["ter_id"];
+                      $descripcion=$row["ter_descripcion"];
+                      echo("
+                            <option value='".$id."'>".$descripcion."</option>
+                         ");
+                      
+                    }
+                    echo("</optgroup>
+                        </select><br> ");
+              ?>  
+                  
+          <label>bus</label><br>
+           <?php 
+                echo("<select name='bus' id='bus'  class='mbn'>
+                     <optgroup label='-----------'>");
+                    
+                    $sql=$con->prepare('select * from bus'); //Se prepara la sentencia SQL
+                    $sql->execute(); //ejecutarla sentencia
+                    $resultado=$sql->fetchALL(PDO::FETCH_ASSOC);
+                    foreach($resultado as $row)
+                    {
+                      $id=$row["bus_id"];
+                      $disco=$row["bus_num_disco"];
+                      echo("
+                            <option value='".$id."'>".$disco."</option>
+                         ");
+                      
+                    }
+                    echo("</optgroup>
+                        </select><br> ");
+              ?>  
+        
+          <label>Asiento</label><br>
+          <input type="text" class="form-control  text-center" name="asiento" id="asiento" value=""><br>
+          <label>Descripcion</label><br>
+          <textarea  name="descripcion" id="descripcion"class="form-control" rows="3"></textarea><br>
+          <label>hora</label><br>
+           <?php 
+                echo("<select name='hora' id='hora'  class='mbn'>
+                     <optgroup label='-----------'>");
+                    
+                    $sql=$con->prepare('select * from horario'); //Se prepara la sentencia SQL
+                    $sql->execute(); //ejecutarla sentencia
+                    $resultado=$sql->fetchALL(PDO::FETCH_ASSOC);
+                    foreach($resultado as $row)
+                    {
+                      $id=$row["hor_id"];
+                      $disco=$row["hor_hora"];
+                      echo("
+                            <option value='".$id."'>".$disco."</option>
+                         ");
+                      
+                    }
+                    echo("</optgroup>
+                        </select><br> ");
+              ?> 
+          <label>Codigo</label><br>
+              <?php 
+                function generarClave ()  { 
+                    $letras =  '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ' ; 
+                    $letrasLength = strlen ( $letras ); 
+                    $clave =  '' ; 
+                    for  ( $i =  0 ; $i < 8 ; $i ++)  { 
+                        $clave .= $letras [ rand ( 0 , $letrasLength -  1 )]; 
+                    } 
+                    return $clave ; 
+                }
+               echo("<input type='text' class='form-control text-center'name='codigo' id='codigo' value='".generarClave()."' readonly='readonly'>");
+               ?>
+      <br>
+      <label>Valor</label><br>
+      <input type="text" class="form-control text-center" name="valor" id="valor" value="4">  <br>
+         <input type="submit" name="enviar">
           
-   echo("</optgroup>
-    </select>
-    <br>
-    <label>destino</label>
-   <select name='destino' id='destino' class='mbn'>
-                    <optgroup label='-----------''>");
-    
-              $sql1=$con->prepare('select * from destino'); //Se prepara la sentencia SQL
-              $sql1->execute(); //ejecutarla sentencia
-              $resultado1=$sql1->fetchALL(PDO::FETCH_ASSOC);
-              foreach($resultado1 as $row1)
-              {
-                $id1=$row1["des_id"];
-                $disco1=$row1["des_descripcion"];
-                echo("
-                      <option value='".$id1."'>".$disco1."</option>
-                   ");
+         
+
+        
+          </form>
+
+         </div>
+    <div class="col-md-6 text-center">
+      <h4><strong>Horarios de Viajes</strong></h4>
+      <hr>
+      <?Php
+
+          $sql=$con->prepare('select * from horario'); //Se prepara la sentencia SQL
+          $sql->execute(); //ejecutarla sentencia
+          $resultado=$sql->fetchALL(PDO::FETCH_ASSOC); //FETCHALL devuleve un array que contiene todas las filas de una tabla
+
+          // echo "<a href='formulario.php'>Insertar</a></br></br>";
+           echo("<table class='table table-bordered table-striped'>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>FECHA</th>
+                    <th>HORA</th>
+                    <th>BUS</th>
+                    <th>DESTINO</th>
+                </tr>
+            </thead>
+            <tbody>");
+           $sql1=$con->prepare('select * from destino'); //Se prepara la sentencia SQL
+           $sql1->execute(); //ejecutarla sentencia
+           $resultado1=$sql1->fetchALL(PDO::FETCH_ASSOC);
+           
+           $sql2=$con->prepare('select * from bus'); //Se prepara la sentencia SQL
+           $sql2->execute(); //ejecutarla sentencia
+           $resultado2=$sql2->fetchALL(PDO::FETCH_ASSOC);
+            foreach($resultado as $row){
+              foreach($resultado1 as $row1){                 
+                if ($row["des_id"]==$row1["des_id"]) {
+                  foreach($resultado2 as $row2){                 
+                      if ($row["bus_id"]==$row2["bus_id"]) {
+                            echo("<tr>
+                                    <td>".$row["hor_id"]."</td>
+                                    <td>".$row["hor_fecha"]."</td>
+                                    <td>".$row["hor_hora"]."</td>
+                                    <td>".$row2["bus_num_disco"]."</td>
+                                    <td>".$row1["des_descripcion"]."</td>
+                                </tr>");
+                      }
+                  }
+                }
               }
-    ?>         
-                    </optgroup>
-
-                  </select>
-    
-<br>
-   <input type="submit" name="enviar">
-    
-   
-
-  
-    </form>
-
+            }
+            
+          echo "</tbody></table>";
+        ?>
+    </div>
+            
   </div>
-  
-  
-  
-  
-  
-  
-  <hr>
-  
-  </div>
-  <hr>
- 
-  
-  <hr>
   <div class="row">
     <div class="text-center col-md-6 col-md-offset-3">
       <h4>Footer </h4>
       <p>Copyright &copy; 2015 &middot; All Rights Reserved &middot; <a href="http://yourwebsite.com/" >My Website</a></p>
     </div>
   </div>
-  
-  
   <hr>
 </div>
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
+<script src="../../static/js/jquery-1.11.2.min.js"></script>
 
-</body>
-<script src="../../static/js/jquery.js"></script> 
 <!-- Include all compiled plugins (below), or include individual files as needed --> 
 <script src="../../static/js/bootstrap.js"></script>
+
+
+</body>
 </html>

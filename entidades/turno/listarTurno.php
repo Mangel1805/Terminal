@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Terminal|Horario</title>
+<title>Terminal|Turno</title>
 
 <!-- Bootstrap -->
 <link href="../../static/css/bootstrap.css" rel="stylesheet">
@@ -22,14 +22,14 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-6 col-md-offset-3">
-      <h1 class="text-center">Lista de Horarios</h1>
+      <h1 class="text-center">Lista de Turnos</h1>
     </div>
   </div>
   <hr>
   
   
   <div class="text-center">
-  <a href="ingresarHorario.php">
+  <a href="ingresarTurno.php">
 <input type="button"  class="btn-info btn-lg" name="button" id="button" value="Nuevo"></a>
   </div>
   
@@ -59,7 +59,6 @@
             <th>BUS</th>
             <th>TERMINAL</th>
             <th>CODIGO</th>
-            <th>--------</th>
             <th>--------</th>
         </tr>
     </thead>
@@ -101,21 +100,7 @@
                             <td>".$row3["bus_num_disco"]."</td>
                             <td>".$row4["ter_descripcion"]."</td>
                             <td>".$row["tur_codigo"]."</td>
-                            <td><a href='actualizarHorario.php?
-                            id=".$row["tur_id"].
-                            "&nasiento=".$row["tur_numero_asiento"].
-                            "&descripcion=".$row["tur_asiento_descripcion"].
-                            "&valor=".$row["tur_valor"].
-                            "&hora=".$row["hor_id"].
-                            "&cliente=".$row["cli_id"].
-                            "&bus=".$row["bus_id"].
-                            "&teerminal=".$row["ter_id"].
-                            "'><button type='button' class='btn btn-primary btn-sm'>
-                                  <span class='glyphicon glyphicon-edit' aria-hidden='true'>
-                                  </span>
-                               </button>
-                            </a></td>
-                            <td><a href='eliminarHorario.php?id=".$row["tur_id"]."'>
+                            <td><a href='eliminarTurno.php?id=".$row["tur_id"]."'>
                             <button type='button' class='btn btn-danger btn-sm'>
                                       <span class='glyphicon glyphicon-remove' aria-hidden='true'>
                                       </span>
