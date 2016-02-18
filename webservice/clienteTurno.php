@@ -42,11 +42,6 @@
 
   </div>
   
-  
-  
-  
-  
-  
   <hr>
   
   </div>
@@ -68,10 +63,8 @@
 </body>
 
 
-
 <script type="text/javascript">
   
-
 function verificar_campos() {
     var text=document.forms[0].codigo.value.length;
     if(text==0) {
