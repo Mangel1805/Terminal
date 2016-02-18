@@ -32,53 +32,79 @@
 <div class="container">
 
 <?php
-if (isset($_POST['enviar'])) {
+		if (isset($_POST['enviar'])) {
 
-require_once('../lib/nusoap.php');
-header('Content-type: text/html');
+			require_once('../lib/nusoap.php');
+			header('Content-type: text/html');
 
-//$client = new nusoap_client('http://localhost/webservice/server_registro.php');
-$urlWebService = 'http://localhost/Terminal/webservice/server_registro.php';
-$urlWSDL = $urlWebService . '?wsdl';
+			//$client = new nusoap_client('http://localhost/webservice/server_registro.php');
+			$urlWebService = 'http://localhost/Terminal/webservice/server_registro.php';
+			$urlWSDL = $urlWebService . '?wsdl';
 
-// Creo el objeto soapclient
-$client = new nusoap_client($urlWSDL, 'wsdl');
+			// Creo el objeto soapclient
+			$client = new nusoap_client($urlWSDL, 'wsdl');
 
 
-//$response=array();
-$response = $client->call('consulta_codigo',array('turno' => $_POST['codigo']));
-$response1=json_decode($response,true);
-echo "<pre>";
+			//$response=array();
+			$response = $client->call('consulta_codigo',array('turno' => $_POST['codigo']));
+			$response1=json_decode($response,true);
 
-//print_r(json_decode($response));
-echo("<table class='table table-bordered table-striped'>
-    <thead>
-        <tr>
-            <th>ASIENTO</th>
-            <th>DESCRIPCION</th>
-            <th>VALOR</th>
-            <th>HORA</th>
-             <th>BUS</th>
+			echo "<pre>";
 
-        </tr>
-    </thead>
-    <tbody>");
+			//print_r(json_decode($response));
+			echo("<table class='table table-bordered table-striped'>
+			    <thead>
+			        <tr>
+			            <th>ASIENTO</th>
+			            <th>DESCRIPCION</th>
+			            <th>VALOR</th>
+			            <th>HORA</th>
+			             <th>BUS</th>
 
-//print_r($response1['asiento']." ".$response1['descripcion']." ".$response1['valor']." ".$response1['hora']." ".$response1['bus']);
+			        </tr>
+			    </thead>
+			    <tbody>");
 
-echo("<tr>
-            <td>".$response1['asiento']."</td>
-            <td>".$response1['descripcion']."</td>
-            <td>".$response1['valor']."</td>
-            <td>".$response1['hora']."</td>
-            <td>".$response1['bus']."</td>
-           
-        </tr>");
-//$myVar = json_decode($response['nombres']);
-//print_r($myVar);
+			//print_r($response1['asiento']." ".$response1['descripcion']." ".$response1['valor']." ".$response1['hora']." ".$response1['bus']);
 
- echo "</tbody></table></div>";
-}
+			echo("<tr>
+			            <td>".$response1['asiento']."</td>
+			            <td>".$response1['descripcion']."</td>
+			            <td>".$response1['valor']."</td>
+			            <td>".$response1['hora']."</td>
+			            <td>".$response1['bus']."</td>
+			           
+			        </tr>");
+			//$myVar = json_decode($response['nombres']);
+			//print_r($myVar);
+
+			 echo "</tbody></table></div>";
+
+			
+		  require('conexion.php'); //llama al archivo conexion
+		  $con=Conectar();
+		  $sql = $con->prepare("SELECT * FROM historial where his_bol_codigo='".$response1['codigo']."'");//preparamos nuestra sentencia SQL
+		  $sql->execute(); //ejecutarla sentencia
+		  $resultado=$sql->fetchALL(PDO::FETCH_ASSOC);
+			if (empty($resultado)) {
+
+			$cedula = $response1['cedula'];
+			$nombre = $response1['nombre'];
+			$codigo = $response1['codigo'];
+			$hora = $response1['hora'];
+			$fecha=date("y-m-d");
+			$asiento = $response1['asiento'];
+			$descripcion = $response1['descripcion'];
+			$bus = $response1['bus'];
+			$destino = $response1['destino'];
+			$valor = $response1['valor'];
+
+			$con = Conectar();
+			$sql1 = 'INSERT INTO historial(his_cedula,his_nombre,his_bol_codigo,his_hora,his_fecha,his_asiento,his_descripcion,his_bus,his_destino,his_total)VALUES (:cedula,:nombre,:codigo,:hora,:fecha,:asiento,:descripcion,:bus,:destino,:valor)';
+			$q = $con->prepare($sql1);
+			$q->execute(array(':cedula'=>$cedula,':nombre'=>$nombre, ':codigo'=>$codigo, ':hora'=>$hora, ':fecha'=>$fecha, ':asiento'=>$asiento, ':descripcion'=>$descripcion, ':bus'=>$bus, ':destino'=>$destino, ':valor'=>$valor));
+		}
+	}
 ?>
  <hr>
   <div class="row">

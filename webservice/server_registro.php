@@ -23,7 +23,7 @@ $server->register('consulta_codigo', array('turno' => 'xsd:string'), array('retu
 	$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);//fetchAll Devuelve un array que contiene todas las filas del conjunto de resultados
 	
 	foreach ($resultado as $row) {// FOREACH RECORRE ARRAYS, $resultado contiene un array de la consulta
-		$result = array('asiento'=>$row['tur_numero_asiento'],'descripcion'=>$row['tur_asiento_descripcion'],'valor'=>$row['tur_valor'],'hora'=>hora($row['hor_id']),'bus'=>bus($row['bus_id']));
+		$result = array('codigo'=>$row['tur_codigo'],'asiento'=>$row['tur_numero_asiento'],'descripcion'=>$row['tur_asiento_descripcion'],'destino'=>destino(horaDestino($row['hor_id'])),'valor'=>$row['tur_valor'],'hora'=>hora($row['hor_id']),'bus'=>bus($row['bus_id']),'cedula'=>clienteCedula($row['cli_id']),'nombre'=>clienteNombre($row['cli_id']));
 
 	}
   		return json_encode($result);
@@ -58,6 +58,63 @@ $server->register('consulta_codigo', array('turno' => 'xsd:string'), array('retu
   		
  }
 
+ function clienteCedula($id)
+ {
+	$con = Conectar();
+	$sql = $con->prepare("SELECT * FROM cliente where cli_id='".$id."'");//preparamos nuestra sentencia SQL
+	$sql->execute();//EJECUTAMOS LA SENTENCIA
+	$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);//fetchAll Devuelve un array que contiene todas las filas del conjunto de resultados
+	
+	foreach ($resultado as $row) {// FOREACH RECORRE ARRAYS, $resultado contiene un array de la consulta
+		$result = $row['cli_cedula'];
+		
+	}return ($result);
+  		
+ }
+
+ function clienteNombre($id)
+ {
+	$con = Conectar();
+	$sql = $con->prepare("SELECT * FROM cliente where cli_id='".$id."'");//preparamos nuestra sentencia SQL
+	$sql->execute();//EJECUTAMOS LA SENTENCIA
+	$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);//fetchAll Devuelve un array que contiene todas las filas del conjunto de resultados
+	
+	foreach ($resultado as $row) {// FOREACH RECORRE ARRAYS, $resultado contiene un array de la consulta
+		$result = $row['cli_nombre']." ".$row['cli_apellido'];
+		
+	}return ($result);
+  		
+ }
+
+
+ function horaDestino($id)
+ {
+	$con = Conectar();
+	$sql = $con->prepare("SELECT * FROM horario where hor_id='".$id."'");//preparamos nuestra sentencia SQL
+	$sql->execute();//EJECUTAMOS LA SENTENCIA
+	$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);//fetchAll Devuelve un array que contiene todas las filas del conjunto de resultados
+	
+	foreach ($resultado as $row) {// FOREACH RECORRE ARRAYS, $resultado contiene un array de la consulta
+		$result = $row['des_id'];
+		
+	}return ($result);
+  		
+ }
+
+
+ function destino($id)
+ {
+	$con = Conectar();
+	$sql = $con->prepare("SELECT * FROM destino where des_id='".$id."'");//preparamos nuestra sentencia SQL
+	$sql->execute();//EJECUTAMOS LA SENTENCIA
+	$resultado = $sql->fetchAll(PDO::FETCH_ASSOC);//fetchAll Devuelve un array que contiene todas las filas del conjunto de resultados
+	
+	foreach ($resultado as $row) {// FOREACH RECORRE ARRAYS, $resultado contiene un array de la consulta
+		$result = $row['des_descripcion'];
+		
+	}return ($result);
+  		
+ }
 
 $HTTP_RAW_POST_DATA = (isset($HTTP_RAW_POST_DATA)) ? $HTTP_RAW_POST_DATA : '';
 $server->service($HTTP_RAW_POST_DATA);
