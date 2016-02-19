@@ -1,4 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Terminal|Turno</title>
 
+<!-- Bootstrap -->
+<link href="../../static/css/bootstrap.css" rel="stylesheet">
+
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<nav class="navbar navbar-default"> <!-- /.container-fluid --> 
+</nav>
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-6 col-md-offset-3">
@@ -9,7 +29,7 @@
   
   
   <div class="text-center">
-  <a href="../../Terminal/turno-insertar.php">
+  <a href="ingresarTurno.php">
 <input type="button"  class="btn-info btn-lg" name="button" id="button" value="Nuevo"></a>
   </div>
   
@@ -20,7 +40,7 @@
 
 <?Php
 
-  //require('../../conexion.php'); //llama al archivo conexion
+  require('../../conexion.php'); //llama al archivo conexion
   $con=Conectar();
   $sql=$con->prepare('select * from turno'); //Se prepara la sentencia SQL
   $sql->execute(); //ejecutarla sentencia
@@ -101,3 +121,22 @@
   echo "</tbody></table></div>";
   //header("location:http://localhost/mantenimiento/formulario.php")
 ?>
+ <hr>
+  <div class="row">
+    <div class="text-center col-md-6 col-md-offset-3">
+      <h4>Footer </h4>
+      <p>Copyright &copy; 2015 &middot; All Rights Reserved &middot; <a href="http://yourwebsite.com/" >My Website</a></p>
+    </div>
+  </div>
+  
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
+<script src="../../static/js/jquery-1.11.2.min.js"></script>
+
+<!-- Include all compiled plugins (below), or include individual files as needed --> 
+<script src="../../static/js/bootstrap.js"></script>
+
+
+
+</body>
+</html> 
