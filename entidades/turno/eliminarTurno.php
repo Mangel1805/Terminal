@@ -1,6 +1,6 @@
 <?Php 
 
-  	require('../../conexion.php'); //llama al archivo conexion
+  	//require('../../conexion.php'); //llama al archivo conexion
 
 	$id=$_GET['id'];
 	$con=Conectar();

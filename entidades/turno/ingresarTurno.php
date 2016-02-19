@@ -1,14 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bootstrap - Prebuilt Layout</title>
-<link href="../../static/css/bootstrap.css" rel="stylesheet">
 
-</head>
-<body>
 <?php
 if (isset($_POST['enviar'])) {
 $cliente=$_POST['cliente'];
@@ -21,7 +11,7 @@ $codigo = $_POST['codigo'];
 $valor=$_POST['valor'];
 
 
-require('../../conexion.php');
+//require('../../conexion.php');
 
 $con = Conectar();
 $sql = 'INSERT INTO turno (tur_numero_asiento,tur_asiento_descripcion,tur_valor,tur_codigo,hor_id,cli_id,bus_id,ter_id)VALUES (:asiento,:descripcion,:valor,:codigo,:hora,:cliente,:bus,:terminal)';
@@ -56,7 +46,7 @@ $q->execute(array(':cliente'=>$cliente,':terminal'=>$terminal, ':bus'=>$bus,':as
               <?php 
                 echo("<select name='cliente' id='cliente'  class='mbn'>
                      <optgroup label='-----------'>");
-                    require('../../conexion.php'); //llama al archivo conexion
+                    //require('../../conexion.php'); //llama al archivo conexion
                     $con=Conectar();
                     $sql=$con->prepare('select * from cliente'); //Se prepara la sentencia SQL
                     $sql->execute(); //ejecutarla sentencia
@@ -215,20 +205,5 @@ $q->execute(array(':cliente'=>$cliente,':terminal'=>$terminal, ':bus'=>$bus,':as
     </div>
             
   </div>
-  <div class="row">
-    <div class="text-center col-md-6 col-md-offset-3">
-      <h4>Footer </h4>
-      <p>Copyright &copy; 2015 &middot; All Rights Reserved &middot; <a href="http://yourwebsite.com/" >My Website</a></p>
-    </div>
-  </div>
-  <hr>
-</div>
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
-<script src="../../static/js/jquery-1.11.2.min.js"></script>
+  
 
-<!-- Include all compiled plugins (below), or include individual files as needed --> 
-<script src="../../static/js/bootstrap.js"></script>
-
-
-</body>
-</html>
